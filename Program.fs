@@ -2,6 +2,14 @@
 
 open System
 
+type Door = Win | Loose
+
+type Game = {
+    Doors :  Door array
+}
+
+let newGame = {Doors =[|Win;Loose;Loose|] }
+
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
