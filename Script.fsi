@@ -15,13 +15,28 @@ let LooseDoor = { BehindDoor = Loose; State = Unpicked }
 
 let newGame = { Doors =[|WinDoor;LooseDoor;LooseDoor|] }
 
+//let random = System.Random(0);
+let random = System.Random();
+
+let newRandomGame() = 
+    let randomDoorIndex = random.Next(3);
+    {
+        Doors = Seq.init 3 (fun i ->
+            match i with 
+            | i when i = randomDoorIndex -> WinDoor 
+            | _ -> LooseDoor) 
+            |> Seq.toArray
+    }
+
+let didContestantWin (game: Game) = 
+    game.Doors |> Seq.exists(fun door -> door.State = Picked && door.BehindDoor = Win)
+
 let printGame (game: Game) =
     printfn "%A" game
     
     //let game = newGame
 
-    if (game.Doors |>
-        Seq.exists(fun door -> door.State = Picked && door.BehindDoor = Win))
+    if (game |> didContestantWin)
     then printfn "Contestant won!"
     else printfn "Contestant lost!"
     ()
@@ -44,19 +59,18 @@ let gameShowHostMove (gameState: Game) =
         gameState.Doors 
         |> Array.mapi (fun i door -> (i , door))
         |> Array.where (fun (_ , door) -> door.State = Unpicked)
-       
 
-    let unpickedDoorToRemoveIndex = 
-        unpickedDoors 
+
+    // TODO -Pick first -> should be random (in the future)
+    let unpickedDoorToKeepIndex = 
+        unpickedDoors
         |> Seq.head
         |> fst
-
-    // Pick first -> should be random (in the future)
     
     let newDoors = 
         gameState.Doors
         |> Seq.mapi (fun i d -> (i, d)) 
-        |> Seq.where (fun (i, _) -> i <> unpickedDoorToRemoveIndex)
+        |> Seq.where (fun (i, d) -> i = unpickedDoorToRemoveIndex || d.State = Picked)
         |> Seq.map snd
         |> Seq.toArray
 
@@ -79,8 +93,19 @@ let contestantSwap (gameState: Game) =
         gameState with Doors = gameState.Doors |> Array.map invertDoorState 
     }
 
-newGame 
-|> contestantMove 0 
-|> gameShowHostMove
-|> contestantSwap
-|> printGame
+//newGame 
+let playGame() = 
+    let endGame = 
+        newRandomGame()
+        |> contestantMove 0 
+        |> gameShowHostMove
+        |> contestantSwap
+    //    |> printGame
+    
+    (endGame, endGame |> didContestantWin)
+
+seq{0..10000}
+|> Seq.map (fun _ -> playGame() )
+//|> Seq.map (fun (game, win) -> game |> printGame; (game,win) )
+|> Seq.where snd
+|> Seq.length
