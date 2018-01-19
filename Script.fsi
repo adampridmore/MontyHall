@@ -52,6 +52,9 @@ let contestantMove doorIndex gameState =
          gameState with Doors = (gameState.Doors |> pickDoor) 
     }
 
+let pickRandom (items: array<'T>) = 
+    items.[random.Next(items |> Array.length)]
+
 let gameShowHostMove (gameState: Game) = 
     //let gameState = newGame |> contestantMove 0
 
@@ -60,17 +63,16 @@ let gameShowHostMove (gameState: Game) =
         |> Array.mapi (fun i door -> (i , door))
         |> Array.where (fun (_ , door) -> door.State = Unpicked)
 
-
-    // TODO -Pick first -> should be random (in the future)
     let unpickedDoorToKeepIndex = 
         unpickedDoors
-        |> Seq.head
+        //|> Seq.head
+        |> pickRandom
         |> fst
     
     let newDoors = 
         gameState.Doors
         |> Seq.mapi (fun i d -> (i, d)) 
-        |> Seq.where (fun (i, d) -> i = unpickedDoorToRemoveIndex || d.State = Picked)
+        |> Seq.where (fun (i, d) -> i = unpickedDoorToKeepIndex || d.State = Picked)
         |> Seq.map snd
         |> Seq.toArray
 
