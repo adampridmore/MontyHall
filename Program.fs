@@ -1,16 +1,15 @@
 ﻿// Learn more about F# at http://fsharp.org
 
 open System
-
-type Door = Win | Loose
-
-type Game = {
-    Doors :  Door array
-}
-
-let newGame = {Doors =[|Win;Loose;Loose|] }
+open MontyHall
 
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
+    seq{0..10000}
+    |> Seq.map (fun _ -> playGame() )
+    //|> Seq.map (fun (game, win) -> game |> printGame; (game,win) )
+    |> Seq.where snd
+    |> Seq.length
+    |> printfn "Won %A games."
+
     0 // return an integer exit code

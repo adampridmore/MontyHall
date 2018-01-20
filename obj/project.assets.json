@@ -4334,33 +4334,28 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Adam\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "/Users/adampridmore/.nuget/packages/": {},
+    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Adam\\Dropbox\\Work\\Dev\\FSharp\\MontyHall\\MontyHall.fsproj",
+      "projectUniqueName": "/Users/adampridmore/Dropbox/Work/Dev/FSharp/MontyHall/MontyHall.fsproj",
       "projectName": "MontyHall",
-      "projectPath": "C:\\Users\\Adam\\Dropbox\\Work\\Dev\\FSharp\\MontyHall\\MontyHall.fsproj",
-      "packagesPath": "C:\\Users\\Adam\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Adam\\Dropbox\\Work\\Dev\\FSharp\\MontyHall\\obj\\",
+      "projectPath": "/Users/adampridmore/Dropbox/Work/Dev/FSharp/MontyHall/MontyHall.fsproj",
+      "packagesPath": "/Users/adampridmore/.nuget/packages/",
+      "outputPath": "/Users/adampridmore/Dropbox/Work/Dev/FSharp/MontyHall/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Adam\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/adampridmore/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\Adam\\AppData\\Local\\NuGet\\Cache": {},
-        "C:\\Users\\Adam\\Dropbox\\Work\\Dev\\NugetPackages": {},
-        "C:\\Users\\Adam\\Dropbox\\Work\\Dev\\PaddingtonHeatmaps2\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4372,14 +4367,14 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "2.0.0",
-            "autoReferenced": true
-          },
           "FSharp.Core": {
             "target": "Package",
-            "version": "4.2.*"
+            "version": "[4.2.*, )"
+          },
+          "Microsoft.NETCore.App": {
+            "target": "Package",
+            "version": "[2.0.0, )",
+            "autoReferenced": true
           }
         },
         "imports": [

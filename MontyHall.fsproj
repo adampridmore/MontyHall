@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="MontyHall.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
