@@ -1,9 +1,9 @@
 module MontyHall
-
 type BehindDoor = Win | Loose 
 type DoorState = Picked | Unpicked
 
 type Door = {
+    name : string
     BehindDoor : BehindDoor;
     State : DoorState
 }
@@ -12,10 +12,21 @@ type Game = {
     Doors :  Door array
 }
 
-let WinDoor = { BehindDoor = Win; State = Unpicked }
-let LooseDoor = { BehindDoor = Loose; State = Unpicked }
+let WinDoor name = {
+    name = name; 
+    BehindDoor = Win;
+    State = Unpicked 
+}
 
-let newGame = { Doors =[|WinDoor;LooseDoor;LooseDoor|] }
+let LooseDoor name = { 
+    name = name;
+    BehindDoor = Loose; 
+    State = Unpicked 
+}
+
+let newGame = { 
+    Doors = [|WinDoor "door 1";LooseDoor "door 2" ;LooseDoor "door 3"|] 
+}
 
 //let random = System.Random(0);
 let random = System.Random();
@@ -24,9 +35,10 @@ let newRandomGame() =
     let randomDoorIndex = random.Next(3);
     {
         Doors = Seq.init 3 (fun i ->
+            let doorName = sprintf "door %d" i
             match i with 
-            | i when i = randomDoorIndex -> WinDoor 
-            | _ -> LooseDoor) 
+            | i when i = randomDoorIndex -> WinDoor (doorName)
+            | _ -> LooseDoor (doorName)  ) 
             |> Seq.toArray
     }
 
@@ -59,24 +71,25 @@ let pickRandom (items: array<'T>) =
 
 let gameShowHostMove (gameState: Game) = 
     //let gameState = newGame |> contestantMove 0
-
-    let unpickedDoors = 
-        gameState.Doors 
-        |> Array.mapi (fun i door -> (i , door))
-        |> Array.where (fun (_ , door) -> door.State = Unpicked)
-
-    let unpickedDoorToKeepIndex = 
-        unpickedDoors
-        //|> Seq.head
-        |> pickRandom
-        |> fst
+    //let gameState = game |> contestantMove 0 
     
+    let unpickedDoors = gameState.Doors |> Array.where (fun d -> d.State = DoorState.Unpicked)
+
+    let unpickedWinningDoor = 
+        unpickedDoors
+        |> Array.where (fun d -> d.BehindDoor = BehindDoor.Win)
+        |> Array.tryHead
+
+    let doorToKeep = 
+        match unpickedWinningDoor with
+        | Some (winningDoor) -> winningDoor
+        | None ->   unpickedDoors
+                    //|> Seq.head
+                    |> pickRandom
+        
     let newDoors = 
-        gameState.Doors
-        |> Seq.mapi (fun i d -> (i, d)) 
-        |> Seq.where (fun (i, d) -> i = unpickedDoorToKeepIndex || d.State = Picked)
-        |> Seq.map snd
-        |> Seq.toArray
+      gameState.Doors 
+      |> Array.where (fun door -> door.State = Picked || door = doorToKeep)
 
     {
         gameState with Doors = newDoors
@@ -108,5 +121,3 @@ let playGame() =
     
     (endGame, endGame |> didContestantWin)
 
-
-// Need to remove all but 1 random door
